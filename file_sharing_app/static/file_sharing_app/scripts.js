@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Auto-inject a "Copy Link" button if a share URL is generated
     const shareUrlDiv = document.querySelector('.share-url');
     if (shareUrlDiv) {
-        // Create the button dynamically
         const copyBtn = document.createElement('button');
         copyBtn.innerText = 'Copy Link';
         copyBtn.className = 'btn';
@@ -34,25 +33,51 @@ document.addEventListener('DOMContentLoaded', () => {
         copyBtn.style.padding = '8px 15px';
         copyBtn.style.fontSize = '10pt';
         
-        // Insert it right after the URL box
         shareUrlDiv.parentNode.insertBefore(copyBtn, shareUrlDiv.nextSibling);
 
-        // Add copy functionality
+        // Success animation function
+        const showSuccess = () => {
+            copyBtn.innerText = 'Copied!';
+            copyBtn.style.backgroundColor = '#27ae60'; 
+            setTimeout(() => {
+                copyBtn.innerText = 'Copy Link';
+                copyBtn.style.backgroundColor = '#2c3e50';
+            }, 2000);
+        };
+
+        // Add copy functionality with a fallback for local HTTP testing
         copyBtn.addEventListener('click', () => {
-            const textToCopy = shareUrlDiv.innerText || shareUrlDiv.textContent;
-            navigator.clipboard.writeText(textToCopy.trim()).then(() => {
-                copyBtn.innerText = 'Copied!';
-                copyBtn.style.backgroundColor = '#27ae60'; // Green on success
+            const textToCopy = (shareUrlDiv.innerText || shareUrlDiv.textContent).trim();
+
+            // Try modern clipboard API first (requires HTTPS or strict localhost)
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(showSuccess)
+                    .catch(err => {
+                        console.error('Clipboard API failed: ', err);
+                        copyBtn.innerText = 'Error copying';
+                    });
+            } else {
+                // Fallback for HTTP (127.0.0.1) development
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
                 
-                // Reset button text after 2 seconds
-                setTimeout(() => {
-                    copyBtn.innerText = 'Copy Link';
-                    copyBtn.style.backgroundColor = '#2c3e50';
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy URL: ', err);
-                copyBtn.innerText = 'Error copying';
-            });
+                // Hide the textarea off-screen
+                textArea.style.position = "absolute";
+                textArea.style.left = "-999999px";
+                document.body.appendChild(textArea);
+                
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showSuccess();
+                } catch (error) {
+                    console.error('Fallback copy failed', error);
+                    copyBtn.innerText = 'Error copying';
+                } finally {
+                    textArea.remove(); // Clean up
+                }
+            }
         });
     }
 });
