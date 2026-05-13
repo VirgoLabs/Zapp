@@ -15,17 +15,23 @@ def home(request):
 
 
 def download_file(request, file_id):    
-    # finds the file in the database
-    shared_file = get_object_or_404(SharedFile, id=file_id)
+# 1. Try to find the file. If it was already downloaded and deleted, catch the error.
+    try:
+        shared_file = SharedFile.objects.get(id=file_id)
+    except SharedFile.DoesNotExist:
+        # File has already been downloaded or the link is invalid
+        return render(request, 'file_sharing_app/expired.html', status=404)
     
+    # 2. Check if the file has passed its 24-hour expiration time
     if shared_file.is_expired():
         # Clean up the actual file from the media folder, then delete DB record
         if shared_file.file:
             shared_file.file.delete(save=False)
         shared_file.delete()
-        return HttpResponse("This file link has expired and was deleted.", status=410)
+        # Show the expired page
+        return render(request, 'file_sharing_app/expired.html', status=410)
     
-    # 1. If the user clicks the "Download" button
+    # 3. If the user clicks the "Download" button
     if request.GET.get('action') == 'download':
         # Read the file data into memory so we can delete the actual file safely
         file_data = shared_file.file.read()
@@ -35,7 +41,7 @@ def download_file(request, file_id):
         response = HttpResponse(file_data, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         
-        #  ONE-TIME DOWNLOAD LOGIC 
+        # 🔥 ONE-TIME DOWNLOAD LOGIC 🔥
         # Delete the actual file from the "uploads" folder
         if shared_file.file:
             shared_file.file.delete(save=False)
@@ -45,7 +51,7 @@ def download_file(request, file_id):
         # Send the file to the user
         return response
     
-    # 2. Otherwise, just show the landing page
+    # 4. Otherwise, just show the landing page
     context = {
         'shared_file': shared_file,
         'filename': os.path.basename(shared_file.file.name)

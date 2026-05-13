@@ -8,28 +8,35 @@
     <link rel="stylesheet" href="{% static 'file_sharing_app/style.css' %}">
 </head>
 <body>
-    <div class="container" style="text-align: center;">
-        <h1>File Ready</h1>
-        <p class="subtitle">Someone shared a file with you securely.</p>
 
-        <div class="result-box" style="background-color: #f8f9fa; border-color: #2c3e50;">
-            <h2 style="margin-top: 0; color: #2c3e50; font-size: 16pt;">
+    <nav class="navbar">
+        <a href="/" class="nav-brand">QuickShare</a>
+    </nav>
+
+    <header class="hero">
+        <h1>File Ready for Download</h1>
+        <p>Someone shared a secure, one-time file with you.</p>
+    </header>
+
+    <main class="container" style="text-align: center; max-width: 500px;">
+        <div class="result-box" style="background-color: #f8fafc; border-color: #cbd5e1; text-align: center;">
+            <h2 style="margin-top: 0; color: #0f172a; font-size: 16pt;">
                 📄 {{ filename }}
             </h2>
 
-            <p style="color: #e74c3c; font-size: 10pt; font-weight: bold; margin-bottom: 5px;">
+            <p style="color: #ef4444; font-size: 10pt; font-weight: bold; margin: 15px 0;">
                 ⚠️ Note: The file will be permanently deleted from the server immediately after you download it.
             </p>
             
-            <a href="?action=download" class="btn" style="display: inline-block; margin-top: 10px; text-decoration: none;">
+            <a href="?action=download" class="btn" style="display: inline-block; margin-top: 10px; text-decoration: none; width: 100%; box-sizing: border-box;">
                 ⬇️ Download Now
             </a>
-            
         </div>
+    </main>
 
-        <div class="footer-note">
-            For your security, this file is temporarily hosted and will be permanently deleted after the expiration time.
-        </div>
-    </div>
+    <footer>
+        <p>&copy; All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
