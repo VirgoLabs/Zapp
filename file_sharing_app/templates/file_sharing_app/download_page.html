@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File | QuickShare</title>
+    <link rel="stylesheet" href="{% static 'file_sharing_app/style.css' %}">
+</head>
+<body>
+    <div class="container" style="text-align: center;">
+        <h1>File Ready</h1>
+        <p class="subtitle">Someone shared a file with you securely.</p>
+
+        <div class="result-box" style="background-color: #f8f9fa; border-color: #2c3e50;">
+            <h2 style="margin-top: 0; color: #2c3e50; font-size: 16pt;">
+                📄 {{ filename }}
+            </h2>
+            
+            <p style="color: #7f8c8d; font-size: 10pt;">
+                Expires on: {{ shared_file.expires_at|date:"F j, Y, g:i a" }}
+            </p>
+            
+            <a href="?action=download" class="btn" style="display: inline-block; margin-top: 15px; text-decoration: none;">
+                ⬇️ Download Now
+            </a>
+        </div>
+
+        <div class="footer-note">
+            For your security, this file is temporarily hosted and will be permanently deleted after the expiration time.
+        </div>
+    </div>
+</body>
+</html>
