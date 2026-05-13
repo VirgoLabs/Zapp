@@ -1,0 +1,40 @@
+{% load static %}  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickShare | Temporary File Sharing</title>
+    
+    <link rel="stylesheet" href="{% static 'file_sharing_app/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>QuickShare</h1>
+        <p class="subtitle">Upload your file and get a temporary sharing link.</p>
+
+        <div class="upload-section">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="file-input">
+                    <input type="file" name="file" id="file" required>
+                </div>
+                <button type="submit" class="btn">Generate Share Link</button>
+            </form>
+        </div>
+
+        {% if share_url %}
+        <div class="result-box">
+            <strong>Your file is ready!</strong>
+            <p>Share this link with others. It will expire in 24 hours.</p>
+            <div class="share-url">{{ share_url }}</div>
+        </div>
+        {% endif %}
+
+        <div class="footer-note">
+            Files are automatically deleted after the expiration period to keep your data private.
+        </div>
+    </div>
+
+    <script src="{% static 'file_sharing_app/scripts.js' %}"></script>
+</body>
+</html>
