@@ -9,11 +9,12 @@ def default_expiry():
 # details of the file uploaded by user
 class SharedFile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # the file which user uploads is stored here 
     file = models.FileField(upload_to='uploads/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=default_expiry)
 
-# checks if the uploaded file is expired or nt
+# checks if the uploaded file is expired or n0t
     def is_expired(self):
         return timezone.now() > self.expires_at
 
