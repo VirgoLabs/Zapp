@@ -1,98 +1,173 @@
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
+    font-family: 'Inter', Tahoma, Geneva, sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
     margin: 0;
     padding: 0;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+/* --- Navigation Bar --- */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 15px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #0f172a;
+    text-decoration: none;
+}
+
+.nav-brand span {
+    font-size: 10pt;
+    color: #64748b;
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+.nav-links a {
+    color: #475569;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #3b82f6;
+}
+
+/* --- Hero Section --- */
+.hero {
+    text-align: center;
+    padding: 60px 20px 20px;
+}
+
+.hero h1 {
+    color: #0f172a;
+    font-size: 32pt;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.hero p {
+    color: #64748b;
+    font-size: 13pt;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Main Container --- */
 .container {
-    max-width: 800px;
-    margin: 40px auto;
+    max-width: 700px;
+    width: 100%;
+    margin: 20px auto 60px;
     background: #ffffff;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    border-top: 5px solid #2c3e50;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    border-top: 5px solid #3b82f6;
+    box-sizing: border-box;
 }
 
-h1 {
-    color: #2c3e50;
-    font-size: 24pt;
+/* --- Features Section --- */
+.features-section {
+    background-color: #ffffff;
+    padding: 60px 10%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    text-align: center;
+    border-top: 1px solid #e2e8f0;
+}
+
+.feature-card h3 {
+    color: #0f172a;
     margin-bottom: 10px;
-    text-align: center;
 }
 
-p.subtitle {
-    text-align: center;
-    color: #7f8c8d;
-    margin-bottom: 30px;
+.feature-card p {
+    color: #64748b;
+    font-size: 10.5pt;
 }
 
+.feature-icon {
+    font-size: 30pt;
+    margin-bottom: 10px;
+}
+
+/* --- Footer --- */
+footer {
+    background-color: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: auto;
+    font-size: 10pt;
+}
+
+/* --- Existing Upload & Result Elements --- */
 .upload-section {
-    border: 2px dashed #bdc3c7;
+    border: 2px dashed #cbd5e1;
     padding: 40px;
     text-align: center;
-    border-radius: 8px;
-    background: #fafafa;
+    border-radius: 12px;
+    background: #f8fafc;
     transition: all 0.3s ease;
 }
 
 .upload-section:hover, .upload-section.dragover {
-    border-color: #3498db;
-    background: #e8f4fd;
+    border-color: #3b82f6;
+    background: #eff6ff;
 }
 
-.file-input {
-    margin-bottom: 20px;
-}
-
-input[type="file"] {
-    font-size: 11pt;
-}
+.file-input { margin-bottom: 20px; }
+input[type="file"] { font-size: 11pt; }
 
 .btn {
-    background-color: #3498db;
+    background-color: #3b82f6;
     color: white;
-    padding: 12px 25px;
+    padding: 12px 28px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 11pt;
     cursor: pointer;
     font-weight: bold;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.1s;
 }
 
-.btn:hover {
-    background-color: #2980b9;
-}
+.btn:hover { background-color: #2563eb; }
+.btn:active { transform: scale(0.98); }
 
 .result-box {
     margin-top: 30px;
     padding: 20px;
-    background-color: #e8f4fd;
-    border-left: 5px solid #3498db;
-    border-radius: 4px;
+    background-color: #eff6ff;
+    border-left: 5px solid #3b82f6;
+    border-radius: 6px;
+    text-align: left;
 }
 
 .share-url {
     display: block;
-    background: #fff;
-    padding: 10px;
-    border: 1px solid #d1d8dd;
-    margin-top: 10px;
+    background: #ffffff;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    margin-top: 12px;
     word-break: break-all;
     font-family: monospace;
-    color: #e67e22;
-    border-radius: 4px;
-}
-
-.footer-note {
-    margin-top: 40px;
-    font-size: 9pt;
-    color: #95a5a6;
-    text-align: center;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
+    color: #3b82f6;
+    border-radius: 6px;
 }
