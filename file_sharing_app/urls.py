@@ -1,10 +1,7 @@
 from django.urls import path
 from . import views
 
-from django.contrib import admin
-
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',views.home, name='home')
+    path('', views.home, name='home'),
+    path('download/<uuid:file_id>/', views.download_file, name='download_file'),
 ]
