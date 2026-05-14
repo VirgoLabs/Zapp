@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How it Works | QuickShare</title>
+    <link rel="stylesheet" href="{% static 'file_sharing_app/style.css' %}">
+    <style>
+        /* Extra styles just for the instruction cards */
+        .step-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            border: 1px solid #e2e8f0;
+        }
+        .step-number {
+            background: #3b82f6;
+            color: white;
+            font-size: 20pt;
+            font-weight: bold;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+        .step-content h2 { margin-top: 0; color: #0f172a; font-size: 16pt; margin-bottom: 8px;}
+        .step-content p { color: #475569; margin-bottom: 0; font-size: 11pt;}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="nav-brand">QuickShare</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="{% url 'how_it_works' %}">How it Works</a>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding-bottom: 40px;">
+        <h1>How QuickShare Works</h1>
+        <p>Simple, secure, and ephemeral file sharing in three easy steps.</p>
+    </header>
+
+    <main class="container" style="background: transparent; box-shadow: none; border: none; padding: 0; max-width: 800px; margin-bottom: 80px;">
+        
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h2>Upload Your File</h2>
+                <p>Select any document, image, or file from your device. As soon as you hit upload, your file is securely transferred to our isolated server environment. No accounts or logins are required.</p>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h2>Share the Secure Link</h2>
+                <p>We instantly generate a unique, cryptographically secure URL link. Copy this link and send it to your intended recipient via email, Slack, or your preferred messaging app.</p>
+            </div>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h2>Burn After Reading</h2>
+                <p>The moment the recipient clicks "Download Now", the file is transferred to them and <strong>immediately, permanently deleted</strong> from our server. If they do not download it within 24 hours, it is automatically wiped anyway to ensure your data never lingers online.</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="/" class="btn" style="text-decoration: none; padding: 15px 35px; font-size: 12pt;">Start Sharing Now</a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

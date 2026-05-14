@@ -57,3 +57,6 @@ def download_file(request, file_id):
         'filename': os.path.basename(shared_file.file.name)
     }
     return render(request, 'file_sharing_app/download_page.html', context)
+
+def how_it_works(request):
+    return render(request, 'file_sharing_app/how_it_works.html') 
