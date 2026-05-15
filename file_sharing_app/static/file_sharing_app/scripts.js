@@ -1,23 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Drag and Drop visual feedback for the upload box
-    const uploadSection = document.querySelector('.upload-section');
-    if (uploadSection) {
-        uploadSection.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadSection.classList.add('dragover');
+    
+    // 1. Drag and Drop & File Selection Logic for the New Dropzone
+    const fileInput = document.getElementById('file');
+    const dropzoneText = document.getElementById('dropzone-text');
+    const dropzoneBox = document.getElementById('dropzone');
+
+    if (fileInput && dropzoneText && dropzoneBox) {
+        // Handle normal click selection
+        fileInput.addEventListener('change', function(e) {
+            if (this.files && this.files.length > 0) {
+                // Update text to show selected file with blue styling
+                dropzoneText.innerHTML = `<span style="color: #3b82f6; font-weight: bold;">Selected:</span><br><span style="color: #0f172a;">${this.files[0].name}</span>`;
+            } else {
+                dropzoneText.innerHTML = "Click to browse or drag files<br>here to start sharing";
+            }
         });
-        
-        uploadSection.addEventListener('dragleave', (e) => {
+
+        // Add visual flair when dragging a file over the box
+        dropzoneBox.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadSection.classList.remove('dragover');
+            dropzoneBox.classList.add('dragover');
         });
-        
-        uploadSection.addEventListener('drop', (e) => {
+
+        // Remove flair when dragging away
+        dropzoneBox.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            uploadSection.classList.remove('dragover');
-            const fileInput = document.getElementById('file');
-            if (fileInput && e.dataTransfer.files.length > 0) {
+            dropzoneBox.classList.remove('dragover');
+        });
+
+        // Handle the actual drop event
+        dropzoneBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzoneBox.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
                 fileInput.files = e.dataTransfer.files;
+                // Manually trigger the change event so the text updates
+                fileInput.dispatchEvent(new Event('change'));
             }
         });
     }
