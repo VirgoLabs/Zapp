@@ -26,21 +26,30 @@
     </header>
 
     <main class="container">
-        <div class="upload-section">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="file-input">
-                    <input type="file" name="file" id="file" required>
-                </div>
-                <button type="submit" class="btn">Generate Share Link</button>
-            </form>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-input">
+                <input type="file" name="file" id="file" required>
+            </div>
+
+            <div
+                style="margin-bottom: 25px; text-align: left; max-width: 250px; margin-left: auto; margin-right: auto;">
+                <label for="expiry_days"
+                    style="display: block; font-size: 10pt; font-weight: 600; color: #475569; margin-bottom: 6px;">Link
+                    valid for (Days):</label>
+                <input type="number" name="expiry_days" id="expiry_days" value="1" min="1" max="30"
+                    style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; font-family: inherit; font-size: 11pt; color: #0f172a; outline: none;">
+            </div>
+
+            <button type="submit" class="btn">Generate Share Link</button>
+        </form>
         </div>
 
         {% if share_url %}
         <div class="result-box">
             <strong style="font-size: 14pt; color: #0f172a;">Your file is ready!</strong>
             <p style="color: #ef4444; font-weight: bold; margin-top: 8px;">⚠️ This is a ONE-TIME download link.</p>
-            <p>Share this link with others. It will be permanently deleted after 1 download or 24 hours.</p>
+            <p>Share this link with others. It will be permanently deleted after 1 download or {{ expiry_days }} day(s).</p>
 
             <div class="share-url">{{ share_url }}</div>
 

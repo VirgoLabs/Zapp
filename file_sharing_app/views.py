@@ -1,15 +1,37 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from .models import SharedFile
+from django.utils import timezone  
+from datetime import timedelta
 import os
 
 def home(request):
-    # user uploads the file and it is stored in database
+# user uploads the file and it is stored in database
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
-        new_file = SharedFile.objects.create(file=uploaded_file)
+        
+        # Grab the requested days from the form (default to 1 if empty/invalid)
+        try:
+            expiry_days = int(request.POST.get('expiry_days', 1))
+        except ValueError:
+            expiry_days = 1
+            
+        # Calculate custom expiration date
+        custom_expiry = timezone.now() + timedelta(days=expiry_days)
+
+        # Create file with the custom expiration time
+        new_file = SharedFile.objects.create(
+            file=uploaded_file, 
+            expires_at=custom_expiry
+        )
+        
         share_url = f"{request.build_absolute_uri('/')}download/{new_file.id}/"
-        return render(request, 'file_sharing_app/home.html', {'share_url': share_url})
+        
+        # Pass the url and the selected days back to the template
+        return render(request, 'file_sharing_app/home.html', {
+            'share_url': share_url,
+            'expiry_days': expiry_days
+        })
     
     return render(request, 'file_sharing_app/home.html')
 
