@@ -118,23 +118,20 @@ footer {
     font-size: 10pt;
 }
 
-/* --- Existing Upload & Result Elements --- */
+/* --- Upload & Result Elements --- */
 .upload-section {
-    border: 2px dashed #cbd5e1;
+    border: 1px solid #e2e8f0;
     padding: 40px;
     text-align: center;
     border-radius: 12px;
-    background: #f8fafc;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     transition: all 0.3s ease;
 }
 
-.upload-section:hover, .upload-section.dragover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+.upload-section:hover {
+    border-color: #cbd5e1;
 }
-
-.file-input { margin-bottom: 20px; }
-input[type="file"] { font-size: 11pt; }
 
 .btn {
     background-color: #3b82f6;
@@ -170,4 +167,181 @@ input[type="file"] { font-size: 11pt; }
     font-family: monospace;
     color: #3b82f6;
     border-radius: 6px;
+}
+
+/* --- Form Styling Upgrades --- */
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.input-group {
+    width: 100%;
+    text-align: left;
+}
+
+.input-label {
+    display: block;
+    font-size: 10.5pt;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.styled-number-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 11pt;
+    color: #0f172a;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: inherit;
+}
+
+.styled-number-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 5px;
+    padding: 14px 28px;
+    font-size: 11.5pt;
+}
+
+/* --- Custom Light Dropzone (Matches Original Site) --- */
+.custom-file-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 35px 20px;
+    background-color: #ffffff; 
+    border: 2px dashed #3b82f6; 
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #475569; 
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.custom-file-dropzone:hover, .custom-file-dropzone.dragover {
+    border-color: #2563eb; 
+    background-color: #eff6ff; 
+}
+
+.hidden-file-input {
+    display: none; 
+}
+
+.dropzone-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid #3b82f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.dropzone-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke-width: 2;
+}
+
+.dropzone-text {
+    font-size: 11.5pt;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+
+/* For Tablets and smaller desktop screens */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 5%;
+    }
+
+    .hero {
+        padding: 40px 15px 10px;
+    }
+
+    .hero h1 {
+        font-size: 24pt;
+    }
+
+    .hero p {
+        font-size: 11pt;
+        padding: 0 10px;
+    }
+
+    .container {
+        width: 92%;
+        padding: 25px 20px;
+        margin: 15px auto 40px;
+    }
+
+    .upload-section, .custom-file-dropzone {
+        padding: 25px 15px;
+    }
+
+    .dropzone-text {
+        font-size: 10pt;
+    }
+
+    .features-section {
+        padding: 40px 5%;
+        gap: 20px;
+    }
+}
+
+/* For Mobile Phones */
+@media (max-width: 480px) {
+    .nav-brand {
+        font-size: 14pt;
+    }
+
+    .nav-links a {
+        margin-left: 12px;
+        font-size: 9.5pt;
+    }
+
+    .container {
+        width: 95%;
+        padding: 20px 15px;
+    }
+
+    /* Stack the 'How it Works' cards on mobile */
+    .step-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center;
+        padding: 20px !important;
+    }
+
+    .step-number {
+        margin-right: 0 !important;
+        margin-bottom: 15px;
+    }
+
+    /* Make share buttons full width on small screens */
+    .result-box > div > a {
+        width: 100%;
+        justify-content: center;
+    }
 }
