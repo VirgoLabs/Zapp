@@ -30,12 +30,15 @@ def home(request):
             max_downloads=max_downloads
         )
         
+        # Generate both the Share Link and the NEW Tracking Link
         share_url = f"{request.build_absolute_uri('/')}download/{new_file.id}/"
+        tracking_url = f"{request.build_absolute_uri('/')}track/{new_file.id}/"
         
         return render(request, 'file_sharing_app/home.html', {
             'share_url': share_url,
+            'tracking_url': tracking_url, # Pass the tracking link to the template
             'expiry_days': expiry_days,
-            'max_downloads': max_downloads # Pass it to the success message
+            'max_downloads': max_downloads 
         })
     
     return render(request, 'file_sharing_app/home.html')
@@ -86,3 +89,42 @@ def download_file(request, file_id):
 
 def how_it_works(request):
     return render(request, 'file_sharing_app/how_it_works.html')
+
+def track_file(request, file_id):
+    try:
+        shared_file = SharedFile.objects.get(id=file_id)
+    except SharedFile.DoesNotExist:
+        # If the file is already deleted, show a deleted status
+        return render(request, 'file_sharing_app/track.html', {'status': 'deleted'})
+
+    # If it is expired, trigger the deletion and show deleted status
+    if shared_file.is_expired():
+        if shared_file.file:
+            shared_file.file.delete(save=False)
+        shared_file.delete()
+        return render(request, 'file_sharing_app/track.html', {'status': 'deleted'})
+
+    # Calculate exact time remaining
+    time_left = shared_file.expires_at - timezone.now()
+    days = time_left.days
+    hours = time_left.seconds // 3600
+    minutes = (time_left.seconds % 3600) // 60
+
+    if days > 0:
+        time_string = f"{days} day(s), {hours} hour(s)"
+    elif hours > 0:
+        time_string = f"{hours} hour(s), {minutes} minute(s)"
+    else:
+        time_string = f"{minutes} minute(s)"
+
+    downloads_left = shared_file.max_downloads - shared_file.current_downloads
+
+    context = {
+        'status': 'active',
+        'filename': os.path.basename(shared_file.file.name),
+        'time_string': time_string,
+        'downloads_left': downloads_left,
+        'max_downloads': shared_file.max_downloads,
+        'current_downloads': shared_file.current_downloads
+    }
+    return render(request, 'file_sharing_app/track.html', context)
