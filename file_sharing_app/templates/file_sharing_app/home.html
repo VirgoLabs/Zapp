@@ -21,8 +21,7 @@
 
     <header class="hero">
         <h1>Share Files Securely.</h1>
-        <p>Upload your documents, generate a secure link, and share it. The file will self-destruct immediately after it
-            is downloaded.</p>
+        <p>Upload your documents, generate a secure link, and share it. The file will self-destruct once your limits are reached.</p>
     </header>
 
     <main class="container">
@@ -49,6 +48,12 @@
                 </div>
 
                 <div class="input-group">
+                    <label for="max_downloads" class="input-label">Max Allowed Downloads</label>
+                    <input type="number" name="max_downloads" id="max_downloads" value="1" min="1" max="100"
+                        class="styled-number-input">
+                </div>
+
+                <div class="input-group">
                     <label for="expiry_days" class="input-label">Link valid for (Days)</label>
                     <input type="number" name="expiry_days" id="expiry_days" value="1" min="1" max="30"
                         class="styled-number-input">
@@ -61,8 +66,8 @@
         {% if share_url %}
         <div class="result-box">
             <strong style="font-size: 14pt; color: #0f172a;">Your file is ready!</strong>
-            <p style="color: #ef4444; font-weight: bold; margin-top: 8px;">⚠️ This is a ONE-TIME download link.</p>
-            <p>Share this link with others. It will be permanently deleted after 1 download or {{ expiry_days }} day(s).
+            <p style="color: #ef4444; font-weight: bold; margin-top: 8px;">⚠️ This link has download limits.</p>
+            <p>Share this link with others. It will be permanently deleted after {{ max_downloads }} download(s) or {{ expiry_days }} day(s).
             </p>
 
             <div class="share-url">{{ share_url }}</div>

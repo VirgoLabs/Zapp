@@ -14,6 +14,10 @@ class SharedFile(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=default_expiry)
 
+    # Tracking downloads
+    max_downloads = models.IntegerField(default=1)
+    current_downloads = models.IntegerField(default=0)
+
 # checks if the uploaded file is expired or n0t
     def is_expired(self):
         return timezone.now() > self.expires_at
