@@ -1,0 +1,11 @@
+# virtual enviroment
+env/
+
+# Python
+__pycache__/
+*.pyc
+
+# database
+db.sqlite3
+
+uploads
