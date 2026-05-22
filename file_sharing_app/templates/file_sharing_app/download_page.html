@@ -15,7 +15,7 @@
 
     <header class="hero">
         <h1>File Ready for Download</h1>
-        <p>Someone shared a secure, one-time file with you.</p>
+        <p>Someone shared a secure file with you.</p>
     </header>
 
     <main class="container" style="text-align: center; max-width: 500px;">
@@ -24,8 +24,12 @@
                 📄 {{ filename }}
             </h2>
 
+            <p style="color: #64748b; font-size: 11pt; margin: 10px 0;">
+                Downloads remaining: <strong>{{ downloads_remaining }}</strong>
+            </p>
+
             <p style="color: #ef4444; font-size: 10pt; font-weight: bold; margin: 15px 0;">
-                ⚠️ Note: The file will be permanently deleted from the server immediately after you download it.
+                ⚠️ Note: The file will be permanently deleted from the server immediately after the limit is reached.
             </p>
             
             <a href="?action=download" class="btn" style="display: inline-block; margin-top: 10px; text-decoration: none; width: 100%; box-sizing: border-box;">
