@@ -63,7 +63,7 @@ def download_file(request, file_id):
         response = HttpResponse(file_data, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         
-        # 🔥 ONE-TIME DOWNLOAD LOGIC 🔥
+        # ONE-TIME DOWNLOAD LOGIC 
         # Delete the actual file from the "uploads" folder
         if shared_file.file:
             shared_file.file.delete(save=False)
