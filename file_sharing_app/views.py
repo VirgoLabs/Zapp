@@ -3,11 +3,12 @@ from django.http import HttpResponse, Http404
 from .models import SharedFile
 from django.utils import timezone  
 from datetime import timedelta
-import os
 
 def home(request):
-    if request.method == 'POST' and request.FILES.get('file'):
-        uploaded_file = request.FILES['file']
+    if request.method == 'POST':
+        # Grab the URL and Name sent from the JavaScript fetch request
+        file_url = request.POST.get('file_url')
+        file_name = request.POST.get('file_name')
         
         # Grab custom expiry days
         try:
@@ -23,20 +24,21 @@ def home(request):
             
         custom_expiry = timezone.now() + timedelta(days=expiry_days)
 
-        # Create file with both limits
+        # Create file record with the Cloudinary URL
         new_file = SharedFile.objects.create(
-            file=uploaded_file, 
+            file_url=file_url, 
+            file_name=file_name,
             expires_at=custom_expiry,
             max_downloads=max_downloads
         )
         
-        # Generate both the Share Link and the NEW Tracking Link
+        # Generate both the Share Link and the Tracking Link
         share_url = f"{request.build_absolute_uri('/')}download/{new_file.id}/"
         tracking_url = f"{request.build_absolute_uri('/')}track/{new_file.id}/"
         
         return render(request, 'file_sharing_app/home.html', {
             'share_url': share_url,
-            'tracking_url': tracking_url, # Pass the tracking link to the template
+            'tracking_url': tracking_url, 
             'expiry_days': expiry_days,
             'max_downloads': max_downloads 
         })
@@ -52,38 +54,37 @@ def download_file(request, file_id):
     
     # Check Expiration
     if shared_file.is_expired():
-        if shared_file.file:
-            shared_file.file.delete(save=False)
         shared_file.delete()
         return render(request, 'file_sharing_app/expired.html', status=410)
     
     # Handle Download Click
     if request.GET.get('action') == 'download':
-        file_data = shared_file.file.read()
-        file_name = os.path.basename(shared_file.file.name)
+        raw_link = shared_file.file_url
         
-        response = HttpResponse(file_data, content_type='application/octet-stream')
-        response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+        # --- NEW: Inject 'fl_attachment' into the URL ---
+        # This tells Cloudinary to force a download instead of displaying the image
+        if '/upload/' in raw_link:
+            cloudinary_link = raw_link.replace('/upload/', '/upload/fl_attachment/')
+        else:
+            cloudinary_link = raw_link
         
-        # NEW: Increment download count
+        # Increment download count
         shared_file.current_downloads += 1
         
-        # If they hit the limit, delete everything. Otherwise, just save the new count.
         if shared_file.current_downloads >= shared_file.max_downloads:
-            if shared_file.file:
-                shared_file.file.delete(save=False)
             shared_file.delete()
         else:
             shared_file.save()
             
-        return response
+        # Redirect to the new attachment-enabled URL
+        return redirect(cloudinary_link)
     
     # Show the landing page
     downloads_remaining = shared_file.max_downloads - shared_file.current_downloads
     context = {
         'shared_file': shared_file,
-        'filename': os.path.basename(shared_file.file.name),
-        'downloads_remaining': downloads_remaining # Pass remaining count to UI
+        'filename': shared_file.file_name,
+        'downloads_remaining': downloads_remaining 
     }
     return render(request, 'file_sharing_app/download_page.html', context)
 
@@ -94,13 +95,9 @@ def track_file(request, file_id):
     try:
         shared_file = SharedFile.objects.get(id=file_id)
     except SharedFile.DoesNotExist:
-        # If the file is already deleted, show a deleted status
         return render(request, 'file_sharing_app/track.html', {'status': 'deleted'})
 
-    # If it is expired, trigger the deletion and show deleted status
     if shared_file.is_expired():
-        if shared_file.file:
-            shared_file.file.delete(save=False)
         shared_file.delete()
         return render(request, 'file_sharing_app/track.html', {'status': 'deleted'})
 
@@ -121,7 +118,7 @@ def track_file(request, file_id):
 
     context = {
         'status': 'active',
-        'filename': os.path.basename(shared_file.file.name),
+        'filename': shared_file.file_name,
         'time_string': time_string,
         'downloads_left': downloads_left,
         'max_downloads': shared_file.max_downloads,
