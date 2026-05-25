@@ -27,8 +27,11 @@
     <main class="container">
 
         <div class="upload-section">
-            <form method="post" enctype="multipart/form-data" class="upload-form">
+            <form method="post" enctype="multipart/form-data" class="upload-form" id="uploadForm">
                 {% csrf_token %}
+
+                <input type="hidden" name="file_url" id="file_url">
+                <input type="hidden" name="file_name" id="file_name">
 
                 <div class="input-group">
                     <label class="input-label" style="text-align: center;">Select File to Share</label>
@@ -43,7 +46,7 @@
                         <div class="dropzone-text" id="dropzone-text">Click to browse or drag files<br>here to start
                             sharing</div>
 
-                        <input type="file" name="file" id="file" class="hidden-file-input" required>
+                        <input type="file" name="file" id="file" class="hidden-file-input">
                     </label>
                 </div>
 
@@ -121,7 +124,6 @@
     </main>
 
     <section class="features-section">
-
         <div class="feature-card">
             <div class="feature-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

@@ -9,8 +9,11 @@ def default_expiry():
 # details of the file uploaded by user
 class SharedFile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # the file which user uploads is stored here 
-    file = models.FileField(upload_to='uploads/')
+    
+    # NEW: We store the Cloudinary URL and Name instead of a physical file
+    file_url = models.URLField(max_length=1000)
+    file_name = models.CharField(max_length=255)
+    
     uploaded_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=default_expiry)
 
@@ -18,12 +21,10 @@ class SharedFile(models.Model):
     max_downloads = models.IntegerField(default=1)
     current_downloads = models.IntegerField(default=0)
 
-# checks if the uploaded file is expired or n0t
+    # checks if the uploaded file is expired or not
     def is_expired(self):
         return timezone.now() > self.expires_at
 
-# name of the file and it expiry time
+    # name of the file and its expiry time
     def __str__(self):
-        return f"{self.file.name} (Expires: {self.expires_at})"
-
-
+        return f"{self.file_name} (Expires: {self.expires_at})"
